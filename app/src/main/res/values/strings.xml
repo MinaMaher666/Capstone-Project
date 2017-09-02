@@ -1,0 +1,44 @@
+<resources>
+    <string name="app_name">PocketGlobe</string>
+
+
+    <!-- Api Strings -->
+    <string name="api_sources_url">https://newsapi.org/v1/sources</string>
+
+    <string name="url_language_parameter">language</string>
+    <string name="url_language_value">en</string>
+
+
+    <string name="api_articles_url">https://newsapi.org/v1/articles</string>
+
+    <string name="url_source_parameter">source</string>
+
+    <string name="url_apikey_parameter">apiKey</string>
+    <string name="url_apikey_value"><!-- put your api key here --></string>
+
+    <string name="url_sortedby_parameter">sortBy</string>
+    <string name="url_sortedby_top">top</string>
+    <string name="url_sortedby_latest">latest</string>
+    <string name="url_sortedby_popular">popular</string>
+
+
+    <!-- JSON Strings -->
+    <string name="json_status">status</string>
+
+    <string name="json_sources">sources</string>
+    <string name="json_sources_id">id</string>
+    <string name="json_source_name">name</string>
+
+    <string name="json_articles">articles</string>
+    <string name="json_article_author">author</string>
+    <string name="json_article_title">title</string>
+    <string name="json_article_description">description</string>
+    <string name="json_article_url">url</string>
+    <string name="json_article_urlToImage">urlToImage</string>
+    <string name="json_article_publishedAt">publishedAt</string>
+
+    <!-- Error -->
+    <string name="no_network_message">No networks available</string>
+    <string name="empty_sources_list">No Sources Available</string>
+    <string name="empty_articles_list">No Articles Available</string>
+</resources>
