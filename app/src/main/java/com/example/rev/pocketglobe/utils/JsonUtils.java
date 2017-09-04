@@ -27,6 +27,10 @@ public class JsonUtils {
     public static List<Source> extractSourcesFromJson(String jsonResponce, Context context) {
         ArrayList<Source> sources = new ArrayList<>();
         try {
+            if (jsonResponce == null || TextUtils.equals(jsonResponce, "")) {
+                return sources;
+            }
+
             JSONObject rootObject = new JSONObject(jsonResponce);
             String status = rootObject.getString(context.getString(R.string.json_status));
 
@@ -55,7 +59,6 @@ public class JsonUtils {
         ArrayList<Article> articles = new ArrayList<>();
         try {
             if (jsonResponse==null || TextUtils.equals(jsonResponse, "")) {
-                FirebaseCrash.report(new Exception("Empty Json Response"));
                 return articles;
             }
 

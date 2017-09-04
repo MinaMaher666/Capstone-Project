@@ -16,6 +16,7 @@
             android:id="@+id/articles_item_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxHeight="@dimen/article_iv_max_height"
             android:scaleType="centerCrop"
             tools:background="#f12250"
             tools:minHeight="150dp" />

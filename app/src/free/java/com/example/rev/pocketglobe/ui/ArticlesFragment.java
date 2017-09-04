@@ -22,6 +22,8 @@ import com.example.rev.pocketglobe.model.Article;
 import com.example.rev.pocketglobe.model.Source;
 import com.example.rev.pocketglobe.utils.JsonUtils;
 import com.example.rev.pocketglobe.utils.NetworkUtils;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,8 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
 
     @BindView(R.id.articles_rv) RecyclerView articlesRecyclerView;
     @BindView(R.id.empty_article_tv) TextView emptyArticleTV;
+    @BindView(R.id.adView) AdView adView;
+
 
     public ArticlesFragment(Source source, String sortby, int loaderId) {
         mSource = source;
@@ -59,6 +63,9 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_articles, container, false);
         ButterKnife.bind(this, rootView);
 
+        AdRequest adRequest = new AdRequest.Builder().build();
+
+        adView.loadAd(adRequest);
 
         mArticles = new ArrayList<>();
         mAdapter = new ArticlesAdapter(mArticles, this);
