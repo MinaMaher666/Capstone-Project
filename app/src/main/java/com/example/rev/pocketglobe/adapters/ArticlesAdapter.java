@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.rev.pocketglobe.R;
-import com.example.rev.pocketglobe.model.Article;
+import com.example.rev.pocketglobe.data.Article;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -66,6 +66,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
             articleTitle.setText(currentArticle.getmTitle());
             Picasso.with(itemView.getContext())
                     .load(currentArticle.getmImageUrl())
+                    .error(R.drawable.error_image)
                     .into(articleImage);
         }
 

@@ -4,12 +4,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.example.rev.pocketglobe.R;
 import com.example.rev.pocketglobe.adapters.SortPagerAdapter;
-import com.example.rev.pocketglobe.model.Source;
+import com.example.rev.pocketglobe.data.Source;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

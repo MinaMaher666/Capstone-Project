@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.rev.pocketglobe.R;
-import com.example.rev.pocketglobe.model.Source;
+import com.example.rev.pocketglobe.data.Source;
 
 import java.util.ArrayList;
 

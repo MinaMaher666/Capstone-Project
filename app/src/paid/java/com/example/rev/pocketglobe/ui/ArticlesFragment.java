@@ -2,6 +2,7 @@ package com.example.rev.pocketglobe.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,8 +19,9 @@ import android.widget.TextView;
 
 import com.example.rev.pocketglobe.R;
 import com.example.rev.pocketglobe.adapters.ArticlesAdapter;
-import com.example.rev.pocketglobe.model.Article;
-import com.example.rev.pocketglobe.model.Source;
+import com.example.rev.pocketglobe.data.Article;
+import com.example.rev.pocketglobe.data.Source;
+import com.example.rev.pocketglobe.utils.ContentProviderUtils;
 import com.example.rev.pocketglobe.utils.JsonUtils;
 import com.example.rev.pocketglobe.utils.NetworkUtils;
 
@@ -37,6 +39,7 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
     public static final String SOURCE = "source";
     public static final String SORTED_BY = "sorted_by";
     public static final String EXTRA_ARTICLE = "article";
+    public boolean isConnected = false;
 
     private Source mSource;
     private String mSortBy;
@@ -68,14 +71,15 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
         articlesRecyclerView.setAdapter(mAdapter);
 
         if (!NetworkUtils.isConnected(getContext())) {
-
+            Toast.makeText(getContext(), getString(R.string.no_network_message), Toast.LENGTH_SHORT).show();
         } else {
-            Bundle loaderBundle = new Bundle();
-            loaderBundle.putString(SOURCE, mSource.getmId());
-            loaderBundle.putString(SORTED_BY, mSortBy);
-
-            getActivity().getSupportLoaderManager().restartLoader(mLoaderId, loaderBundle, this);
+            isConnected = true;
         }
+        Bundle loaderBundle = new Bundle();
+        loaderBundle.putString(SOURCE, mSource.getmId());
+        loaderBundle.putString(SORTED_BY, mSortBy);
+
+        getActivity().getSupportLoaderManager().restartLoader(mLoaderId, loaderBundle, this);
 
         return rootView;
     }
@@ -96,9 +100,11 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
                 String jsonResponse = NetworkUtils.getArticlesJsonResponse(context,
                         args.getString(SOURCE),
                         args.getString(SORTED_BY));
-                Log.i(TAG, "loadInBackground: " + NetworkUtils.buildArticlesUrl(context, args.getString(SOURCE),
-                        args.getString(SORTED_BY)));
-                return JsonUtils.extractArticlesFromJson(jsonResponse, context);
+                if(isConnected) {
+                    return JsonUtils.extractArticlesFromJson(jsonResponse, context);
+                } else {
+                    return ContentProviderUtils.getArticlesFromProvider(getContext(), mSource.getmId(), mSortBy);
+                }
             }
         };
     }
@@ -109,13 +115,23 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Article>> loader, List<Article> data) {
-        mArticles.clear();
-        mArticles.addAll(data);
-        if(data.size() == 0) {
+    public void onLoadFinished(Loader<List<Article>> loader, final List<Article> data) {
+        if(data ==null || data.size() == 0) {
             showEmptyListView();
         }
-        Log.i(TAG, "onLoadFinished: " + mArticles.size());
+
+        if (isConnected) {
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    ContentProviderUtils.insertArticlesIntoContentProvider(getContext(), data, mSource.getmId(), mSortBy);
+                    return null;
+                }
+            }.execute();
+        }
+        mArticles.clear();
+        mArticles.addAll(data);
         mAdapter.notifyDataSetChanged();
     }
 

@@ -10,8 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.rev.pocketglobe.R;
-import com.example.rev.pocketglobe.model.Article;
+import com.example.rev.pocketglobe.data.Article;
 import com.squareup.picasso.Picasso;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +27,7 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.article_date) TextView articleDateTV;
     @BindView(R.id.article_image) ImageView articleImageIV;
     @BindView(R.id.article_url) TextView articleUrlTV;
-
+    @BindView(R.id.article_author) TextView articleAuthor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +44,7 @@ public class DetailActivity extends AppCompatActivity {
 
     void setViews(Article mainArticle) {
         String articleTitle = mainArticle.getmTitle();
+        articleAuthor.setText(mainArticle.getmAuthor());
         String articleDate = mainArticle.getmDate();
         String imageUrl = mainArticle.getmImageUrl();
         final String articleUrl = mainArticle.getmUrl();
@@ -48,9 +52,15 @@ public class DetailActivity extends AppCompatActivity {
 
         articleTitleTV.setText(articleTitle);
         articleDesTV.setText(description);
-        articleDateTV.setText(articleDate);
+        if(articleDate != null) {
+            articleDateTV.setText(articleDate.substring(0, articleDate.indexOf('T')));
+        } else {
+            articleDateTV.setVisibility(View.GONE);
+        }
         Picasso.with(DetailActivity.this)
-                .load(imageUrl).into(articleImageIV);
+                .load(imageUrl)
+                .error(R.drawable.error_image)
+                .into(articleImageIV);
 
         articleUrlTV.setOnClickListener(new View.OnClickListener() {
             @Override

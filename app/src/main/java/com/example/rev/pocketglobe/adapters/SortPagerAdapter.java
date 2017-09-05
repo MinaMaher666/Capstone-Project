@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.rev.pocketglobe.R;
-import com.example.rev.pocketglobe.model.Source;
+import com.example.rev.pocketglobe.data.Source;
 import com.example.rev.pocketglobe.ui.ArticlesFragment;
 
 

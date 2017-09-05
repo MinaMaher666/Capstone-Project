@@ -5,6 +5,6 @@
     <dimen name="small_padding">8dp</dimen>
 
     <dimen name="source_tv_height">60dp</dimen>
-    <dimen name="article_iv_max_height">300dp</dimen>
+    <dimen name="article_iv_max_height">200dp</dimen>
     <dimen name="progressbar_dimen">42dp</dimen>
 </resources>

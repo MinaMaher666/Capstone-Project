@@ -1,4 +1,4 @@
-package com.example.rev.pocketglobe.model;
+package com.example.rev.pocketglobe.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;

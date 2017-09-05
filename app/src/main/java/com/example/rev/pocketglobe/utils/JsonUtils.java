@@ -5,8 +5,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.rev.pocketglobe.R;
-import com.example.rev.pocketglobe.model.Article;
-import com.example.rev.pocketglobe.model.Source;
+import com.example.rev.pocketglobe.data.Article;
+import com.example.rev.pocketglobe.data.Source;
 import com.google.firebase.crash.FirebaseCrash;
 
 import org.json.JSONArray;

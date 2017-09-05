@@ -2,6 +2,7 @@ package com.example.rev.pocketglobe.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -16,7 +17,8 @@ import android.widget.Toast;
 
 import com.example.rev.pocketglobe.R;
 import com.example.rev.pocketglobe.adapters.SourcesAdapter;
-import com.example.rev.pocketglobe.model.Source;
+import com.example.rev.pocketglobe.data.Source;
+import com.example.rev.pocketglobe.utils.ContentProviderUtils;
 import com.example.rev.pocketglobe.utils.JsonUtils;
 import com.example.rev.pocketglobe.utils.NetworkUtils;
 
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int SOURCES_MANAGER_ID = 666;
     public static final String EXTRA_SOURCE = "source";
+    public boolean isConnected = false;
     private Toast mToast;
     private ArrayList<Source> mSources;
     private SourcesAdapter mAdapter;
@@ -54,8 +57,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         if(!NetworkUtils.isConnected(context)) {
             showNoNetworkToast();
-            showEmptyListView();
+            getSupportLoaderManager().initLoader(SOURCES_MANAGER_ID, null, this);
+//            showEmptyListView();
         } else {
+            isConnected = true;
             getSupportLoaderManager().initLoader(SOURCES_MANAGER_ID, null, this);
         }
     }
@@ -90,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<List<Source>> onCreateLoader(int id, Bundle args) {
         final Context context = MainActivity.this;
+
         return new AsyncTaskLoader<List<Source>>(context) {
             @Override
             protected void onStartLoading() {
@@ -100,17 +106,31 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
             @Override
             public List<Source> loadInBackground() {
-                String jsonResponse = NetworkUtils.getSourcesJsonResponse(context);
-                return JsonUtils.extractSourcesFromJson(jsonResponse, context);
+                if (isConnected) {
+                    String jsonResponse = NetworkUtils.getSourcesJsonResponse(context);
+                    return JsonUtils.extractSourcesFromJson(jsonResponse, context);
+                } else {
+                    return ContentProviderUtils.getSourcesFromProvider(MainActivity.this);
+                }
             }
         };
     }
 
     @Override
-    public void onLoadFinished(Loader<List<Source>> loader, List<Source> data) {
-        if(data == null || data.size() ==0) {
+    public void onLoadFinished(Loader<List<Source>> loader, final List<Source> data) {
+        if(data == null || data.size() == 0) {
             showEmptyListView();
         } else {
+            if(isConnected) {
+                // Adding Downloaded Sources into the Provider
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        ContentProviderUtils.insertSourcesIntoContentProvider(MainActivity.this, data);
+                        return null;
+                    }
+                }.execute();
+            }
             mSources.clear();
             mSources.addAll(data);
             mAdapter.notifyDataSetChanged();
