@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 
 import com.example.rev.pocketglobe.data.Article;
 import com.example.rev.pocketglobe.data.NewsContentProvider;
@@ -116,5 +115,23 @@ public class ContentProviderUtils {
         String selection = NewsContract.ArticleEntry.SOURCE_ID + " =? and " + NewsContract.ArticleEntry.SORTED_BY + " =? ";
         String[] selectionArgs = new String[]{sourceId, sortedBy};
         return context.getContentResolver().delete(NewsContentProvider.Articles.ARTICLES, selection, selectionArgs);
+    }
+
+
+    public static Article getLatestArticle(Context context) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(NewsContentProvider.Articles.ARTICLES, null, null, null, null);
+        Article article = null;
+        if (cursor.moveToNext()) {
+            String author = cursor.getString(cursor.getColumnIndex(NewsContract.ArticleEntry.AUTHOR));
+            String date = cursor.getString(cursor.getColumnIndex(NewsContract.ArticleEntry.DATE));
+            String title = cursor.getString(cursor.getColumnIndex(NewsContract.ArticleEntry.TITLE));
+            String description = cursor.getString(cursor.getColumnIndex(NewsContract.ArticleEntry.DESCRIPTION));
+            String url = cursor.getString(cursor.getColumnIndex(NewsContract.ArticleEntry.URL));
+            String imageUrl = cursor.getString(cursor.getColumnIndex(NewsContract.ArticleEntry.IMAGE_URL));
+            article = new Article(author, title, description, url, imageUrl, date);
+        }
+        cursor.close();
+        return article;
     }
 }

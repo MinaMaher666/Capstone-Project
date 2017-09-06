@@ -9,7 +9,7 @@
         android:padding="@dimen/normal_padding"
         android:id="@+id/source_name"
         tools:text="ABC News"
-        android:gravity="center_vertical"
+        android:gravity="center_vertical|left|start"
         android:layout_width="match_parent"
         android:layout_height="@dimen/source_tv_height" />
 </FrameLayout>

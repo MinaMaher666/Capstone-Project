@@ -62,6 +62,7 @@ public class SourcesAdapter extends RecyclerView.Adapter<SourcesAdapter.SourceVi
 
         void bind(int position) {
             sourceTv.setText(mSources.get(position).getmName());
+            sourceTv.setContentDescription(mSources.get(position).getmName());
         }
 
         @Override

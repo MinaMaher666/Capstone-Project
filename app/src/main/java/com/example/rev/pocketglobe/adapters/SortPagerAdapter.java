@@ -1,6 +1,7 @@
 package com.example.rev.pocketglobe.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -14,6 +15,10 @@ public class SortPagerAdapter extends FragmentPagerAdapter {
     private Context mContext;
     private Source mSource;
     private String[] mTabs;
+
+    public static final String SOURCE = "source";
+    public static final String SORT = "sort";
+    public static final String LOADER_ID = "loader_id";
 
     public static final int ARTICLES_LOADER_BASE_ID = 777;
     public SortPagerAdapter(FragmentManager fm, Context context, Source source) {
@@ -29,7 +34,13 @@ public class SortPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return new ArticlesFragment(mSource, mTabs[position], ARTICLES_LOADER_BASE_ID+position);
+        ArticlesFragment fragment = new ArticlesFragment();
+        Bundle fragmentBundle = new Bundle();
+        fragmentBundle.putParcelable(SOURCE, mSource);
+        fragmentBundle.putString(SORT, mTabs[position]);
+        fragmentBundle.putInt(LOADER_ID, ARTICLES_LOADER_BASE_ID+position);
+        fragment.setArguments(fragmentBundle);
+        return fragment;
     }
 
     @Override

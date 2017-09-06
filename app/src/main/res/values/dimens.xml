@@ -7,4 +7,10 @@
     <dimen name="source_tv_height">60dp</dimen>
     <dimen name="article_iv_max_height">200dp</dimen>
     <dimen name="progressbar_dimen">42dp</dimen>
+
+    <!--
+Refer to App Widget Documentation for margin information
+http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
+    -->
+    <dimen name="widget_margin">8dp</dimen>
 </resources>

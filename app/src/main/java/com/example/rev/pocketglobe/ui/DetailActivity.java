@@ -27,7 +27,7 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.article_date) TextView articleDateTV;
     @BindView(R.id.article_image) ImageView articleImageIV;
     @BindView(R.id.article_url) TextView articleUrlTV;
-    @BindView(R.id.article_author) TextView articleAuthor;
+    @BindView(R.id.article_author) TextView articleAuthorTV;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +40,13 @@ public class DetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setViews(mainArticle);
+        setContentDescription(mainArticle);
     }
 
     void setViews(Article mainArticle) {
         String articleTitle = mainArticle.getmTitle();
-        articleAuthor.setText(mainArticle.getmAuthor());
         String articleDate = mainArticle.getmDate();
+        String articleAuthor = mainArticle.getmAuthor();
         String imageUrl = mainArticle.getmImageUrl();
         final String articleUrl = mainArticle.getmUrl();
         String description = mainArticle.getmDescription();
@@ -56,6 +57,12 @@ public class DetailActivity extends AppCompatActivity {
             articleDateTV.setText(articleDate.substring(0, articleDate.indexOf('T')));
         } else {
             articleDateTV.setVisibility(View.GONE);
+        }
+
+        if(articleAuthor != null) {
+            articleAuthorTV.setText(articleAuthor);
+        } else {
+            articleAuthorTV.setVisibility(View.GONE);
         }
         Picasso.with(DetailActivity.this)
                 .load(imageUrl)
@@ -71,5 +78,22 @@ public class DetailActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    void setContentDescription(Article mainArticle) {
+        String articleTitle = mainArticle.getmTitle();
+        String articleDate = mainArticle.getmDate();
+        String articleAuthor = mainArticle.getmAuthor();
+        String description = mainArticle.getmDescription();
+
+        articleTitleTV.setContentDescription(articleTitle);
+        articleTitleTV.setContentDescription(articleTitle);
+        articleDesTV.setContentDescription(description);
+        if(articleDate != null) {
+            articleDateTV.setContentDescription(articleDate);
+        }
+        if (articleAuthor != null) {
+            articleAuthorTV.setContentDescription(articleAuthor);
+        }
     }
 }

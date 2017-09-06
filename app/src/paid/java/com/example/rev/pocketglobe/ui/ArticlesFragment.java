@@ -16,9 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.rev.pocketglobe.R;
 import com.example.rev.pocketglobe.adapters.ArticlesAdapter;
+import com.example.rev.pocketglobe.adapters.SortPagerAdapter;
 import com.example.rev.pocketglobe.data.Article;
 import com.example.rev.pocketglobe.data.Source;
 import com.example.rev.pocketglobe.utils.ContentProviderUtils;
@@ -50,10 +52,14 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
     @BindView(R.id.articles_rv) RecyclerView articlesRecyclerView;
     @BindView(R.id.empty_article_tv) TextView emptyArticleTV;
 
-    public ArticlesFragment(Source source, String sortby, int loaderId) {
-        mSource = source;
-        mSortBy = sortby;
-        mLoaderId = loaderId;
+    public ArticlesFragment() {
+    }
+
+    @Override
+    public void setArguments(Bundle args) {
+        mSource = args.getParcelable(SortPagerAdapter.SOURCE);
+        mSortBy = args.getString(SortPagerAdapter.SORT);
+        mLoaderId = args.getInt(SortPagerAdapter.LOADER_ID);
     }
 
     @Nullable
