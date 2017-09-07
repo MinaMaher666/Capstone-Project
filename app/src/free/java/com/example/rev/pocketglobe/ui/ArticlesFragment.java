@@ -11,6 +11,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,9 +76,18 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
 
         adView.loadAd(adRequest);
 
+        if(savedInstanceState != null) {
+            if(savedInstanceState.containsKey(SOURCE)) {
+                mSource = savedInstanceState.getParcelable(SOURCE);
+            }
+            if (savedInstanceState.containsKey(SORTED_BY)) {
+                mSortBy = savedInstanceState.getString(SORTED_BY);
+            }
+        }
+
         mArticles = new ArrayList<>();
         mAdapter = new ArticlesAdapter(mArticles, this);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(numberOfColumns(),
                 StaggeredGridLayoutManager.VERTICAL);
 
         articlesRecyclerView.setLayoutManager(layoutManager);
@@ -92,14 +102,31 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
         loaderBundle.putString(SOURCE, mSource.getmId());
         loaderBundle.putString(SORTED_BY, mSortBy);
 
-        getActivity().getSupportLoaderManager().restartLoader(mLoaderId, loaderBundle, this);
+        getActivity().getSupportLoaderManager().initLoader(mLoaderId, loaderBundle, this);
 
         return rootView;
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(SOURCE, mSource);
+        outState.putString(SORTED_BY, mSortBy);
+        super.onSaveInstanceState(outState);
+    }
+
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        // You can change this divider to adjust the size of the poster
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
+    }
+
+    @Override
     public Loader<List<Article>> onCreateLoader(int id, final Bundle args) {
-        Log.i(TAG, "onCreateLoader: ");
         final Context context = getContext();
         return new AsyncTaskLoader<List<Article>>(context) {
             @Override
@@ -127,30 +154,35 @@ public class ArticlesFragment extends Fragment implements LoaderManager.LoaderCa
         emptyArticleTV.setVisibility(View.VISIBLE);
     }
 
+    void hideEmptyListView() {
+        emptyArticleTV.setVisibility(View.GONE);
+        articlesRecyclerView.setVisibility(View.VISIBLE);
+    }
+
     @Override
     public void onLoadFinished(Loader<List<Article>> loader, final List<Article> data) {
         if(data ==null || data.size() == 0) {
             showEmptyListView();
-        }
+        } else {
+            if (isConnected) {
+                new AsyncTask<Void, Void, Void>() {
 
-        if (isConnected) {
-            new AsyncTask<Void, Void, Void>() {
-
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    ContentProviderUtils.insertArticlesIntoContentProvider(getContext(), data, mSource.getmId(), mSortBy);
-                    return null;
-                }
-            }.execute();
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        ContentProviderUtils.insertArticlesIntoContentProvider(getContext(), data, mSource.getmId(), mSortBy);
+                        return null;
+                    }
+                }.execute();
+            }
+            mArticles.clear();
+            mArticles.addAll(data);
+            mAdapter.notifyDataSetChanged();
+            hideEmptyListView();
         }
-        mArticles.clear();
-        mArticles.addAll(data);
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<List<Article>> loader) {
-
     }
 
     @Override

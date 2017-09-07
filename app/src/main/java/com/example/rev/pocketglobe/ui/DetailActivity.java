@@ -54,7 +54,13 @@ public class DetailActivity extends AppCompatActivity {
         articleTitleTV.setText(articleTitle);
         articleDesTV.setText(description);
         if(articleDate != null) {
-            articleDateTV.setText(articleDate.substring(0, articleDate.indexOf('T')));
+            String date;
+            if (articleDate.indexOf('T')>0) {
+                date = articleDate.substring(0, articleDate.indexOf('T'));
+            } else {
+                date = articleDate;
+            }
+            articleDateTV.setText(date);
         } else {
             articleDateTV.setVisibility(View.GONE);
         }

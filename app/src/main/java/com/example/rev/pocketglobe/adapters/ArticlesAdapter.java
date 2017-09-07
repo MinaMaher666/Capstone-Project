@@ -67,6 +67,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.Articl
             articleTitle.setContentDescription(currentArticle.getmTitle());
             Picasso.with(itemView.getContext())
                     .load(currentArticle.getmImageUrl())
+                    .placeholder(R.drawable.error_image)
                     .error(R.drawable.error_image)
                     .into(articleImage);
         }

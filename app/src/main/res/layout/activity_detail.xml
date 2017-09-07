@@ -8,7 +8,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="256dp"
+        android:layout_height="@dimen/detail_appbar_height"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -29,15 +29,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
-                    tools:background="#e21055" />
+                    tools:background="@color/detail_image_placeholder_color" />
 
                 <TextView
                     android:padding="@dimen/small_padding"
                     android:id="@+id/article_title"
                     android:layout_gravity="bottom"
-                    android:background="#99000000"
+                    android:background="@color/detail_title_highlight_color"
                     android:layout_width="match_parent"
-                    android:layout_height="64dp" />
+                    android:layout_height="@dimen/detail_title_tv_height" />
             </FrameLayout>
 
 
@@ -51,7 +51,7 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffe5e5e5"
+        android:background="@color/nastedscroll_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
@@ -62,8 +62,8 @@
                 android:id="@+id/article_author"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_margin="16dp"
-                android:textSize="14sp"
+                android:layout_margin="@dimen/normal_margin"
+                android:textSize="@dimen/small_text_size"
                 tools:text="Author name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -74,9 +74,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:layout_margin="16dp"
+                android:layout_margin="@dimen/normal_margin"
                 android:alpha="0.5"
-                android:textSize="14sp"
+                android:textSize="@dimen/small_text_size"
                 tools:text="@string/fake_date" />
 
             <TextView
@@ -86,7 +86,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@id/article_date"
-                android:layout_margin="16dp"
+                android:layout_margin="@dimen/normal_margin"
                 tools:text="@string/lorem_ipsum" />
 
             <TextView
@@ -94,10 +94,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/article_description"
-                android:layout_margin="8dp"
+                android:layout_margin="@dimen/small_margin"
                 android:text="@string/link_string"
                 android:textColor="@color/colorAccent"
-                android:textSize="18sp"
+                android:textSize="@dimen/normal_text_size"
                 android:textStyle="italic|bold" />
         </RelativeLayout>
 
